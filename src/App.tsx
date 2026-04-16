@@ -232,10 +232,21 @@ export default function App() {
         body: JSON.stringify(formData),
       });
 
-      const payload = await response.json();
+      const rawBody = await response.text();
+      let payload: any = {};
+
+      if (rawBody) {
+        try {
+          payload = JSON.parse(rawBody);
+        } catch {
+          payload = { error: rawBody };
+        }
+      }
 
       if (!response.ok) {
-        throw new Error(payload?.error || "Unable to generate the letter right now.");
+        throw new Error(
+          payload?.error || `Unable to generate the letter right now (HTTP ${response.status}).`
+        );
       }
 
       const letter = payload?.letter as string | undefined;
