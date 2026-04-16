@@ -1,5 +1,8 @@
 import { generateInvitationLetter, type InvitationData } from "../src/lib/gemini";
 
+// Ensure this runs in the Node.js runtime (Edge runtime doesn't support @google/genai properly).
+export const runtime = "nodejs";
+
 export default async function handler(req: any, res: any) {
   if (req.method !== "POST") {
     res.setHeader("Allow", "POST");
