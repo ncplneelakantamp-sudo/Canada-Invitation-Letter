@@ -4,8 +4,11 @@ function getGeminiApiKey(): string {
   // Vite only exposes variables prefixed with `VITE_` to browser code.
   const viteKey = (import.meta as any)?.env?.VITE_GEMINI_API_KEY;
   // Fallback for non-browser contexts (tests / server-side scripts).
-  const nodeKey = typeof process !== "undefined" ? (process as any)?.env?.GEMINI_API_KEY : undefined;
-  return (viteKey ?? nodeKey ?? "") as string;
+  const nodeKey =
+    typeof process !== "undefined"
+      ? (process as any)?.env?.GEMINI_API_KEY ?? (process as any)?.env?.VITE_GEMINI_API_KEY
+      : undefined;
+  return String(viteKey ?? nodeKey ?? "").trim();
 }
 
 function createGeminiClient() {

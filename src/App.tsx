@@ -31,7 +31,7 @@ import { Separator } from "@/components/ui/separator";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Toaster } from "@/components/ui/sonner";
 import { toast } from "sonner";
-import { InvitationData, generateInvitationLetter } from "@/src/lib/gemini";
+import type { InvitationData } from "@/src/lib/gemini";
 import { supabase } from "@/src/lib/supabase";
 
 import { 
@@ -224,7 +224,21 @@ export default function App() {
   const handleGenerate = async () => {
     setIsGenerating(true);
     try {
-      const letter = await generateInvitationLetter(formData);
+      const response = await fetch("/api/generate-letter", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const payload = await response.json();
+
+      if (!response.ok) {
+        throw new Error(payload?.error || "Unable to generate the letter right now.");
+      }
+
+      const letter = payload?.letter as string | undefined;
       if (letter) {
         setGeneratedLetter(letter);
         
@@ -251,7 +265,11 @@ export default function App() {
       }
       toast.success("Invitation letter generated successfully!");
     } catch (error) {
-      toast.error("Error generating letter. Please check your API key.");
+      const message =
+        error instanceof Error && error.message
+          ? error.message
+          : "Unable to generate the letter right now.";
+      toast.error(`Error generating letter: ${message}`);
     } finally {
       setIsGenerating(false);
     }
