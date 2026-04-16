@@ -9,7 +9,7 @@ This project is optimized for deployment on Vercel. Follow these steps to deploy
 1. **Push to GitHub/GitLab/Bitbucket**: Ensure your code is in a repository.
 2. **Import to Vercel**: Go to [Vercel](https://vercel.com) and import your repository.
 3. **Configure Environment Variables**:
-   - In the Vercel project settings, add an environment variable named `GEMINI_API_KEY`.
+  - In the Vercel project settings, add an environment variable named `VITE_GEMINI_API_KEY`.
    - Set its value to your Google Gemini API key.
 4. **Build Settings**:
    - Vercel should automatically detect the Vite framework.

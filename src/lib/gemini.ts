@@ -1,6 +1,20 @@
 import { GoogleGenAI } from "@google/genai";
 
-const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+function getGeminiApiKey(): string {
+  // Vite only exposes variables prefixed with `VITE_` to browser code.
+  const viteKey = (import.meta as any)?.env?.VITE_GEMINI_API_KEY;
+  // Fallback for non-browser contexts (tests / server-side scripts).
+  const nodeKey = typeof process !== "undefined" ? (process as any)?.env?.GEMINI_API_KEY : undefined;
+  return (viteKey ?? nodeKey ?? "") as string;
+}
+
+function createGeminiClient() {
+  const apiKey = getGeminiApiKey();
+  if (!apiKey) {
+    throw new Error("Missing Gemini API key. Set `VITE_GEMINI_API_KEY` in your environment (.env).");
+  }
+  return new GoogleGenAI({ apiKey });
+}
 
 export interface InvitationData {
   visa_type: string;
@@ -89,6 +103,7 @@ export async function extractInfoFromDocuments(files: { data: string, mimeType: 
   `;
 
   try {
+    const ai = createGeminiClient();
     const response = await ai.models.generateContent({
       model: "gemini-3-flash-preview",
       contents: {
@@ -102,7 +117,11 @@ export async function extractInfoFromDocuments(files: { data: string, mimeType: 
       }
     });
 
-    return JSON.parse(response.text);
+    const text =
+      typeof (response as any)?.text === "function"
+        ? await (response as any).text()
+        : (response as any)?.text;
+    return JSON.parse(text);
   } catch (error) {
     console.error("Error extracting info:", error);
     return {};
@@ -235,12 +254,17 @@ export async function generateInvitationLetter(data: InvitationData) {
   `;
 
   try {
+    const ai = createGeminiClient();
     const response = await ai.models.generateContent({
       model: "gemini-3.1-pro-preview",
       contents: prompt,
     });
 
-    return response.text;
+    const letterText =
+      typeof (response as any)?.text === "function"
+        ? await (response as any).text()
+        : (response as any)?.text;
+    return letterText;
   } catch (error) {
     console.error("Error generating letter:", error);
     throw error;
