@@ -1,4 +1,4 @@
-import { generateInvitationLetter, type InvitationData } from "../src/lib/gemini";
+import { generateInvitationLetter, type InvitationData } from "../src/lib/gemini.js";
 
 // Ensure this runs in the Node.js runtime (Edge runtime doesn't support @google/genai properly).
 export const runtime = "nodejs";

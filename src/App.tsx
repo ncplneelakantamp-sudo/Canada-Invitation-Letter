@@ -31,7 +31,7 @@ import { Separator } from "@/components/ui/separator";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Toaster } from "@/components/ui/sonner";
 import { toast } from "sonner";
-import type { InvitationData } from "@/src/lib/gemini";
+import type { InvitationData } from "@/src/lib/gemini.js";
 import { supabase } from "@/src/lib/supabase";
 
 import { 

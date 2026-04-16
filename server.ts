@@ -4,7 +4,7 @@ import path from "path";
 import { fileURLToPath } from "url";
 import dotenv from "dotenv";
 import net from "net";
-import { generateInvitationLetter, type InvitationData } from "./src/lib/gemini";
+import { generateInvitationLetter, type InvitationData } from "./src/lib/gemini.js";
 
 dotenv.config();
 
