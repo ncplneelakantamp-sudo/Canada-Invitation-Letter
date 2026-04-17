@@ -225,8 +225,7 @@ export async function generateInvitationLetter(data: InvitationData) {
        | Name | Date of Birth | Status in Canada | Relationship | Residence |
        | :--- | :--- | :--- | :--- | :--- |
        | ${data.inviter_name} | ${data.inviter_dob} | ${data.inviter_status} | ${data.relationship} | ${data.inviter_address} |
-    21. Supporting Documents Section: "### Supporting Documents Attached" (Use ### for this heading)
-        Followed by a bulleted list of all documents provided from the Supporting Documents list: ${data.supporting_documents.join(", ")}.
+
     22. Closing: "Please do not hesitate to contact me at ${data.inviter_phone}/${data.inviter_email} should you require further information."
     23. Signature Block: "Sincerely,\n\n${data.inviter_name}"
     24. Notary Section: "### SIGNED BEFORE ME" (Use ### for this heading)
